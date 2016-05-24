@@ -207,7 +207,7 @@ Para gerar o jar que será distribuído execute o seguinte comando na pasta raiz
 	
 Feito isso, o jar gerado estará dentro da pasta **target**. Este é o executável que deve ser distribuído.
 
-### 3.2. Execução
+### 3.4. Execução
 
 No terminal do seu computador execute o comando:
 
