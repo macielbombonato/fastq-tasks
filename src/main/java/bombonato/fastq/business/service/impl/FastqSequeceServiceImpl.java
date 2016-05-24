@@ -256,6 +256,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                             sequences.add(seq);
                             buffer++;
                         } else {
+                            System.out.print("\n");
+
                             storeLoadedSequence(
                                     r1,
                                     r2,
@@ -278,6 +280,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                 // Process remaning sequences
                 if (sequences != null
                         && sequences.size() > 0) {
+                    System.out.print("\n");
+
                     storeLoadedSequence(
                             r1,
                             r2,
@@ -426,9 +430,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
 
             StringBuffer bar = new StringBuffer();
 
-            bar.append("\r" + message + " [");
+            bar.append("\r[");
 
-            System.out.print("\r" + message + " [");
             for (int i = 0; i < width; i++) {
                 if (i <= (progressPercentage / fraction)) {
                     bar.append("#");
@@ -436,7 +439,7 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                     bar.append(" ");
                 }
             }
-            bar.append("] " + new BigDecimal(progressPercentage).setScale(3, BigDecimal.ROUND_CEILING).toString() + "%");
+            bar.append("] " + new BigDecimal(progressPercentage).setScale(3, BigDecimal.ROUND_CEILING).toString() + "% -> " + message);
 
             System.out.print(bar.toString());
 
