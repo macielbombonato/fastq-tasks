@@ -1,0 +1,9 @@
+/.settings
+/.project
+/.classpath
+/target
+/.idea
+/fastqDB.tmp
+/fastqDB.log
+/fastqDB.properties
+/fastqDB.script
