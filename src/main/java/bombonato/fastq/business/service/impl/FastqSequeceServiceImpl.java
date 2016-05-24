@@ -424,15 +424,21 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
 
             double progressPercentage = ((current / total) * 100D);
 
+            StringBuffer bar = new StringBuffer();
+
+            bar.append("\r" + message + " [");
+
             System.out.print("\r" + message + " [");
             for (int i = 0; i < width; i++) {
                 if (i <= (progressPercentage / fraction)) {
-                    System.out.print("#");
+                    bar.append("#");
                 } else {
-                    System.out.print(" ");
+                    bar.append(" ");
                 }
             }
-            System.out.print("] " + new BigDecimal(progressPercentage).setScale(3, BigDecimal.ROUND_CEILING).toString() + "%");
+            bar.append("] " + new BigDecimal(progressPercentage).setScale(3, BigDecimal.ROUND_CEILING).toString() + "%");
+
+            System.out.print(bar.toString());
 
             if (progressPercentage == 100D) {
                 System.out.print("\n");
