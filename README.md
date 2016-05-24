@@ -207,13 +207,13 @@ Para gerar o jar que será distribuído execute o seguinte comando na pasta raiz
 	
 Feito isso, o jar gerado estará dentro da pasta **target**. Este é o executável que deve ser distribuído.
 
-### 3.3. Download do executável
+### 3.4. Download do executável
 
 Baixe a última versão [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads/fastq-tasks-1.1.0.jar).
 
 Ou acesse a área de download com todas versões geradas [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads).
 
-### 3.4. Execução
+### 3.5. Execução
 
 No terminal do seu computador execute o comando:
 
