@@ -195,7 +195,7 @@ Desenvolvedores devem possuir o Java (JDK) seguindo o mesmo padrão para versõe
 
 É necessário também que o desenvolvedor possua o Maven 3.2+ instalado.
 
-### 3.3. Download e empacotamento
+### 3.3. Download do fonte e empacotamento
 
 Para baixar o código fonte para sua máquina, basta executar o comando:
 
@@ -206,6 +206,12 @@ Para gerar o jar que será distribuído execute o seguinte comando na pasta raiz
 	$ mvn clean install
 	
 Feito isso, o jar gerado estará dentro da pasta **target**. Este é o executável que deve ser distribuído.
+
+### 3.3. Download do executável
+
+Baixe a última versão [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads/fastq-tasks-1.1.0.jar).
+
+Ou acesse a área de download com todas versões geradas [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads).
 
 ### 3.4. Execução
 
