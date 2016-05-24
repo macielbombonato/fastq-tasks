@@ -48,10 +48,17 @@ public interface FastqSequenceRepository extends JpaRepository<FastqSequence, St
 
     @Query("select f " +
             "from FastqSequence f " +
-            "where (f.sequence1 like :seq1 " +
-            "  and  f.sequence2 like :seq2 ) " +
-            "   or (f.sequence1 like :seq2 " +
-            "  and  f.sequence2 like :seq1 ) " +
+            "where ( " +
+            " ( " +
+            "       f.sequence1 like :seq1 " +
+            "  and  f.sequence2 like :seq2 " +
+            " ) " +
+            "   or " +
+            " (" +
+            "       f.sequence1 like :seq2 " +
+            "  and  f.sequence2 like :seq1 " +
+            " ) " +
+            " ) " +
             "  and f.id != :id " +
             "  and f.status = :status " +
             "order by f.id ")
