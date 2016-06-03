@@ -187,9 +187,7 @@ Muito útil para máquinas com baixa performance.
 
 ### 3.2. Requisitos
 
-Se você é apenas usuário, basta ter o Java 1.6+ instalado em sua máquina. 
-
-Recomendamos a versão 1.8+.
+Se você é apenas usuário, basta ter o Java 1.8+ instalado em sua máquina.
 
 Desenvolvedores devem possuir o Java (JDK) seguindo o mesmo padrão para versões.
 
@@ -209,9 +207,7 @@ Feito isso, o jar gerado estará dentro da pasta **target**. Este é o executáv
 
 ### 3.4. Download do executável
 
-Baixe a última versão [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads/fastq-tasks-1.1.0.jar).
-
-Ou acesse a área de download com todas versões geradas [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads).
+Acesse a área de download com todas versões geradas [clicando aqui](https://bitbucket.org/unesp/fastq-tasks/downloads).
 
 ### 3.5. Execução
 

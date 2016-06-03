@@ -19,6 +19,7 @@ public interface FastqSequenceService {
             String r1,
             String r2,
             long minSize,
+            int parallel,
             double minQual,
             double minQualPerc,
             boolean skipDuplicates,

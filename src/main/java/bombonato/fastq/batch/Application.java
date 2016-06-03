@@ -28,6 +28,7 @@ public class Application {
 	public static final String PARAM_MIN_QUALITY="qual=";
 	public static final String PARAM_MIN_QUALITY_PERCENTAGE="qualPerc=";
 	public static final String PARAM_MIN_SEQUENCE="seq=";
+	public static final String PARAM_PARALLEL="parallel=";
 
 	public static final String PARAM_HELP="--help";
 
@@ -62,6 +63,7 @@ public class Application {
 			String r1 = null;
 			String r2 = null;
 			long minSize = 80L;
+			int parallel = 4;
 			double minQual = 20D;
 			double minQualPerc = 80D;
 
@@ -100,6 +102,9 @@ public class Application {
 				} else if (args[i].startsWith(PARAM_MIN_SEQUENCE)) {
 					String value[] = args[i].split("=");
 					minSize = new Long(value[1]);
+				} else if (args[i].startsWith(PARAM_PARALLEL)) {
+					String value[] = args[i].split("=");
+					parallel = new Integer(value[1]);
 				} else if (args[i].startsWith(PARAM_SKIP_DUPLICATES)) {
 					skipDuplicates = true;
 				} else if (args[i].startsWith(PARAM_SKIP_SIMILAR)) {
@@ -135,6 +140,7 @@ public class Application {
 						r1,
 						r2,
 						minSize,
+						parallel,
 						minQual,
 						minQualPerc,
 						skipDuplicates,
@@ -176,6 +182,7 @@ public class Application {
 		System.out.println("    seq         seq=SIZE - minimal size of each sequence. Default is 80.");
 		System.out.println("    qual        qual=SCORE - minimal quality of each nucleotide. Default is 20.");
 		System.out.println("    qualPerc    qualPerc=PERC - minimal quality percentual of each sequence. Default is 80.");
+		System.out.println("    parallel    Number of threads to run parallel. Default is 4.");
 		System.out.println("");
 		System.out.println("    --help              Show this help");
 		System.out.println("    --skip-duplicates   Don't process duplicated sequences validation.");
