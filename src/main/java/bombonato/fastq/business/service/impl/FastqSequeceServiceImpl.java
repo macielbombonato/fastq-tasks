@@ -19,9 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Service("fastqSequenceService")
 public class FastqSequeceServiceImpl implements FastqSequenceService {
@@ -348,9 +346,46 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
     private void waitForTheOthers(ExecutorService executor) {
         executor.shutdown();
         try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            executor.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             log.error(e);
+        }
+    }
+
+    private void waitParallels(int parallel, List<Future<?>> futures, Future<?> future) {
+        if (!future.isDone()) {
+            futures.add(future);
+        }
+
+        if (futures.size() == parallel) {
+            List<Integer> indexes = new ArrayList<Integer>();
+            int index = 0;
+
+            while(indexes.size() < (parallel - 2)) {
+                for (Future<?> fut : futures) {
+                    if (fut.isDone()) {
+                        indexes.add(index++);
+                    } else {
+                        try {
+                            fut.get(1, TimeUnit.SECONDS);
+                        } catch (InterruptedException e) {
+                        } catch (ExecutionException e) {
+                        } catch (TimeoutException e) {
+                        }
+
+                        index++;
+                    }
+                }
+            }
+
+            for (int i = indexes.size() - 1; i >= 0; i--) {
+                try {
+                    if (futures.get(i) != null) {
+                        futures.remove(i);
+                    }
+                } catch (Exception e) {
+                }
+            }
         }
     }
 
@@ -369,11 +404,13 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
 
         ExecutorService executor = Executors.newWorkStealingPool(parallel);
 
+        List<Future<?>> futures = new ArrayList<Future<?>>();
+
         long index = 0;
 
         for(final FastqSequence bseq : sequences) {
 
-            executor.submit(() -> {
+            Future<?> future = executor.submit(() -> {
 
                 bseq.setSize1(
                         this.calculateSize(bseq.getSequence1())
@@ -431,6 +468,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                 }
 
             });
+
+            waitParallels(parallel, futures, future);
 
             updateProgress("Writing buffer data", new Double(++index), new Double(sequences.size()));
 
@@ -502,11 +541,13 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
 
         ExecutorService executor = Executors.newWorkStealingPool(parallel);
 
+        List<Future<?>> futures = new ArrayList<Future<?>>();
+
         for (long index = 1; index <= totalSeqs; index++) {
             final FastqSequence seq = fastqSequenceRepository.findByIdAndStatus(index, Status.USE);
 
             if (seq != null) {
-                executor.submit(() -> {
+                Future<?> future = executor.submit(() -> {
                     List<FastqSequence> duplicatedSeqList = null;
                     if (seq.getSeqId2() != null) {
                         String sequence1 = null;
@@ -602,6 +643,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                     }
 
                 });
+
+                waitParallels(parallel, futures, future);
 
             }
 
