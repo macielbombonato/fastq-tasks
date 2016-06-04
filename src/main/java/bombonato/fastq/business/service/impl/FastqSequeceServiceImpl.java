@@ -358,32 +358,20 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
         }
 
         if (futures.size() == parallel) {
-            List<Integer> indexes = new ArrayList<Integer>();
-            int index = 0;
+            boolean hasDoneSomeThread = false;
 
-            while(indexes.size() < (parallel - 2)) {
+            while(!hasDoneSomeThread) {
                 for (Future<?> fut : futures) {
                     if (fut.isDone()) {
-                        indexes.add(index++);
+                        hasDoneSomeThread = true;
                     } else {
                         try {
-                            fut.get(1, TimeUnit.SECONDS);
+                            fut.get(10, TimeUnit.SECONDS);
                         } catch (InterruptedException e) {
                         } catch (ExecutionException e) {
                         } catch (TimeoutException e) {
                         }
-
-                        index++;
                     }
-                }
-            }
-
-            for (int i = indexes.size() - 1; i >= 0; i--) {
-                try {
-                    if (futures.get(i) != null) {
-                        futures.remove(i);
-                    }
-                } catch (Exception e) {
                 }
             }
         }
@@ -409,6 +397,8 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
         long index = 0;
 
         for(final FastqSequence bseq : sequences) {
+
+            final long finalIndex = ++index;
 
             Future<?> future = executor.submit(() -> {
 
@@ -467,11 +457,10 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                     }
                 }
 
+                updateProgress("Writing buffer data", new Double(finalIndex), new Double(sequences.size()));
             });
 
             waitParallels(parallel, futures, future);
-
-            updateProgress("Writing buffer data", new Double(++index), new Double(sequences.size()));
 
         } // end for
 
@@ -547,6 +536,9 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
             final FastqSequence seq = fastqSequenceRepository.findByIdAndStatus(index, Status.USE);
 
             if (seq != null) {
+
+                final long finalIndex = index;
+
                 Future<?> future = executor.submit(() -> {
                     List<FastqSequence> duplicatedSeqList = null;
                     if (seq.getSeqId2() != null) {
@@ -642,13 +634,14 @@ public class FastqSequeceServiceImpl implements FastqSequenceService {
                         }
                     }
 
+                    updateProgress("Looking for duplicated or similar sequences", new Double(finalIndex), new Double(totalSeqs));
+
                 });
 
                 waitParallels(parallel, futures, future);
 
             }
 
-            updateProgress("Looking for duplicated or similar sequences", new Double(index), new Double(totalSeqs));
         }
 
         waitForTheOthers(executor);
